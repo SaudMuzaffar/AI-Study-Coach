@@ -1,0 +1,38 @@
+Deploy
+
+| Product Price Tracker
+
+® Loading products from database...
+
+V Loaded 5 products.
+
+Select a product to view its price history:
+
+Oppo Reno 13F 4g-Graphite Grey-256GB - 8GB RAM v
+
+® Selected Name: Oppo Reno 13F 4g-Graphite Grey-256GB - 8GB RAM
+
+1B Product ID to fetch: 7
+@ Price Trend for 'Oppo Reno 13F 4g-Graphite Grey-256GB - 8GB RAM'
+
+80k
+78k
+76k
+74k
+
+72k
+
+Price (PKR)
+
+70k
+
+68k
+
+66k
+
+64k
+
+12:00 00:00 12:00 00:00 12:00 00:00
+Apr 1, 2025 Apr 2, 2025 Apr 3, 2025 Apr 4, 2025
+
+Date

@@ -1,0 +1,13 @@
+[theme]
+base = "dark"
+
+[server]
+headless = true
+enableCORS = false
+
+[browser]
+gatherUsageStats = false
+
+[ui]
+hideTopBar = false
+sidebarState = "collapsed"  # ← the magic line

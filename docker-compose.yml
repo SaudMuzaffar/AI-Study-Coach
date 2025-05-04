@@ -1,9 +1,25 @@
-version: '3.9'
+version: "3.9"
 
 services:
-  dashboard:
-    build: .
+  qdrant:
+    image: qdrant/qdrant
     ports:
-      - "8501:8501"
+      - "6333:6333"
     volumes:
-      - .:/app
+      - qdrant_data:/qdrant/storage
+
+  dashboard:
+    build: ./dashboard          # uses dashboard/Dockerfile
+    ports:
+      - "8501:8501"             # open in browser at localhost:8501
+    volumes:
+      - ./dashboard:/app        # mount ONLY dashboard code into /app
+    working_dir: /app           # so Home.py is at /app/Home.py
+    # Don't override CMD; Dockerfile already runs Home.py
+    depends_on:
+      - qdrant
+    env_file:
+    - .env
+
+volumes:
+  qdrant_data:

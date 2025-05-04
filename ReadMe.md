@@ -11,10 +11,16 @@ This is **Module 1** of the full build process.
 
 - Upload PDFs, PNG, JPG, JPEG files manually
 - Extract text using **PyMuPDF** (PDF) and **Tesseract OCR** (images / scanned PDFs)
-- Save extracted `.txt` files and metadata to disk
+- Optional "🧠 Force OCR" mode for fully scanned books
+- Auto-warns about slow OCR at upload time
+- **Visual progress feedback** during long uploads and embedding
+- Extracted `.txt` files and upload metadata stored in `uploads/`
+- Automatically chunk, embed, and store into **Qdrant vector DB** on upload
+- Preview extracted text instantly (up to 20,000 chars in UI)
 - Browse uploaded files via **Uploaded Notes page**
 - Delete notes from disk with one click
 - Search uploaded files by filename
+- Ask questions via **QA Agent** using semantic search and RAG
 - Clean **dark-themed** multi-page **Streamlit UI** with branding ("AI Study Coach by Saud Muzaffar")
 - Fully Dockerized (runs via `docker-compose`)
 
@@ -27,12 +33,18 @@ ai-study-coach/
 ├── dashboard/
 │   ├── Home.py                  # Upload center
 │   ├── pages/
-│   │   └── Uploaded_Notes.py   # Browse/delete notes
+│   │   ├── 1_Upload_Notes.py    # Browse/delete notes
+│   │   └── 2_QA_Agent.py        # Ask questions (semantic search)
+│   ├── embeddings/
+│   │   ├── embed_utils.py       # Chunk, embed, store to Qdrant
+│   │   ├── semantic_search.py   # Semantic search from Qdrant
+│   │   └── rag_agent.py         # RAG answer generator
 │   ├── .streamlit/
 │   │   └── config.toml         # Theme + sidebar behavior
 │   └── requirements.txt
 ├── Dockerfile
 ├── docker-compose.yml
+├── .env                        # OpenAI key (not included)
 └── README.md
 ```
 
@@ -76,6 +88,11 @@ services:
       - "8501:8501"
     volumes:
       - .:/app
+  qdrant:
+    image: qdrant/qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
 ```
 
 ---
@@ -94,18 +111,29 @@ Visit: [http://localhost:8501](http://localhost:8501)
 You’ll see:
 - Home (upload page)
 - Uploaded Notes (preview + delete)
+- QA Agent (ask questions from uploaded content)
 
 Sidebar is auto-collapsed for a clean layout.
 
 ---
 
-## 🧭 Next Module: Embedding + Vector Search
+## 🧠 Current Architecture
+
+- LangChain used for chunking & embedding
+- OpenAI for embeddings + LLM
+- Qdrant as fast vector database
+- RAG system: Top-k semantic results are retrieved → passed to GPT-3.5 → answer generated
+- All processed automatically at upload time
+
+---
+
+## 🧭 Next Module: Quiz Generation & Memory
 
 In the next phase, we will:
-- Chunk extracted text using LangChain
-- Embed using OpenAI or HuggingFace models
-- Store in ChromaDB or Qdrant
-- Enable semantic search + smart Q&A
+- Auto-generate custom quizzes from uploaded content
+- Track score history per user
+- Store user interaction memory
+- Add gamified streaks + rewards
+- Optional calendar sync for revision reminders
 
 Stay tuned! 🚀
-

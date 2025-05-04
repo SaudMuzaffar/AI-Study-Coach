@@ -3,3 +3,7 @@ PyMuPDF
 pytesseract
 Pillow
 pandas
+qdrant-client
+langchain-openai
+python-dotenv
+langchain

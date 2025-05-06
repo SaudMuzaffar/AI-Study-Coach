@@ -1,5 +1,5 @@
 # 📘 AI Study Coach – MVP README
-
+Youtube demo @ https://www.youtube.com/watch?v=T-BnhxutV9w
 ## 🔥 Overview
 
 AI Study Coach is a dockerized Streamlit-based SaaS app that allows students to upload notes (PDFs, images), extract text (including OCR), view and manage uploaded content, and later perform smart tasks like semantic search, quiz generation, and performance tracking — all based on their **own study material**.

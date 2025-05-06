@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 from embeddings.embed_utils import embed_and_store
 
-# Load env variables
+# Load environment variables
 load_dotenv()
 
 # Page config
@@ -59,14 +59,18 @@ if not os.path.exists(log_path):
 
 df = pd.read_csv(log_path)
 
-# Search box
-search_term = st.text_input("🔍 Search by filename (case-insensitive):")
-filtered_df = df[df["filename"].str.contains(search_term, case=False, na=False)]
+# --- Deduplicate dropdown options (keep latest entries only) ---
+dedup_df = df.drop_duplicates(subset=["filename"], keep="last")
 
-# File dropdown
+# --- Search box ---
+search_term = st.text_input("🔍 Search by filename (case-insensitive):")
+filtered_df = dedup_df[dedup_df["filename"].str.contains(search_term, case=False, na=False)]
+
+# --- File selection ---
 if not filtered_df.empty:
     selected_file = st.selectbox("Select a file to preview", filtered_df["filename"].tolist())
-    file_path = filtered_df[filtered_df["filename"] == selected_file]["text_file"].values[0]
+    selected_row = df[df["filename"] == selected_file].iloc[-1]  # get latest matching row
+    file_path = selected_row["text_file"]
 
     if os.path.exists(file_path):
         with open(file_path, "r", encoding="utf-8") as f:
@@ -83,20 +87,19 @@ if not filtered_df.empty:
             height=600
         )
 
-        # Embedding info
         st.info("📌 This file was already embedded at upload time.")
 
         # Delete option
         if st.button("🗑️ Delete this file"):
             try:
                 os.remove(file_path)
-                df = df[df["filename"] != selected_file]
+                df = df.drop(selected_row.name)  # only delete that specific row
                 df.to_csv(log_path, index=False)
-                st.success(f"Deleted '{selected_file}' successfully.")
+                st.success(f"✅ Deleted '{selected_file}' successfully.")
                 st.rerun()
             except Exception as e:
-                st.error(f"Error deleting file: {e}")
+                st.error(f"❌ Error deleting file: {e}")
     else:
-        st.warning("Text file not found.")
+        st.warning("⚠️ Text file not found.")
 else:
     st.warning("No matching files found.")

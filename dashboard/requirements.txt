@@ -1,9 +1,26 @@
+# Core Web App
 streamlit
+pandas
+python-dotenv
+tqdm
+
+# Text Extraction
 PyMuPDF
 pytesseract
 Pillow
-pandas
-qdrant-client
-langchain-openai
-python-dotenv
+
+# LangChain + OpenAI for RAG & QA
 langchain
+langchain-openai
+openai
+
+# Embedding + Vector Store
+qdrant-client
+
+# Plotting for Dashboard & History
+plotly
+
+
+
+# Other
+requests
